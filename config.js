@@ -1,5 +1,7 @@
 module.exports = {
     app: {
-        token: 'insert-token-here'
+        token: 'your-bot-token-here',
+        applicationId: 'some-application-id',
+        guildId: 'your-server-id',
     },
 };
