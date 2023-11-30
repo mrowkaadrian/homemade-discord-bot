@@ -1,7 +1,9 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
-const config = require('./config');
+const { config } = require('dotenv');
+
+config();
 
 const client = new Client({
     intents: [
@@ -27,7 +29,7 @@ client.on(Events.InteractionCreate, async interaction => {
     }
 });
 
-client.login(config.app.token);
+client.login(process.env.TOKEN);
 
 function loadSlashCommands() {
     const foldersPath = path.join(__dirname, 'commands');
