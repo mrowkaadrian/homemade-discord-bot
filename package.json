@@ -12,6 +12,7 @@
   "author": "Adrian Mrowka",
   "license": "ISC",
   "dependencies": {
+    "discord-player": "^6.6.6",
     "discord.js": "^14.14.1",
     "dotenv": "^16.3.1",
     "ytdl-core": "^4.11.5"
