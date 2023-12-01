@@ -1,4 +1,5 @@
 const { Events } = require('discord.js');
+const { logger } = require('../logging/logger');
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -9,6 +10,7 @@ module.exports = {
             await command.execute(interaction);
         } catch (error) {
             console.error(error);
+            logger.error(error);
         }
     },
 }

@@ -1,5 +1,6 @@
 const fs = require('node:fs');
 const path = require('node:path');
+const logger = require('./logging/logger');
 
 function getCommands(client = undefined) {
     const commands = [];
@@ -26,6 +27,7 @@ function getCommands(client = undefined) {
                 }
             } else {
                 console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+                logger.warn(`The command at ${filePath} is missing a required "data" or "execute" property.`);
             }
         }
     }
