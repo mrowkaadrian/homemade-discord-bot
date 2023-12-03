@@ -17,7 +17,17 @@ client.commands = new Collection();
 getCommands(client);
 handleEvents(client);
 
-const musicPlayer = new Player(client);
+const musicPlayer = prepareMusicPlayer();
 
 client.login(process.env.TOKEN);
 
+async function prepareMusicPlayer() {
+    const player = new Player(client);
+    await player.extractors.loadDefault((ext) => ext !== 'YouTubeExtractor');
+
+    player.on('trackStart', (queue, track) => {
+        queue.metadata.send(`Now playing: ${track.title}`);
+    });
+
+    return player;
+}
