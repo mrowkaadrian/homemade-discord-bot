@@ -1,7 +1,7 @@
 import { Events } from 'discord.js';
 import logger from '../logging/logger.js';
 
-export const event = {
+export default {
 	name: Events.InteractionCreate,
 	async execute(interaction) {
 		const command = interaction.client.commands.get(interaction.commandName);

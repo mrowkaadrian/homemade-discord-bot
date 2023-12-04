@@ -1,7 +1,7 @@
 import { Events } from 'discord.js';
 import logger from '../logging/logger.js';
 
-export const event = {
+export default {
 	name: Events.ClientReady,
 	once: true,
 	execute(client) {

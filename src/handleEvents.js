@@ -1,19 +1,15 @@
-const fs = require('node:fs');
-const path = require('node:path');
+import { eventList } from './events/eventList.js';
+import logger from './logging/logger.js';
 
-function handleEvents(client) {
-    const eventsPath = path.join(__dirname, 'events');
-    const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
-
-    for (const file of eventFiles) {
-        const filePath = path.join(eventsPath, file);
-        const event = require(filePath);
-        if (event.once) {
-            client.once(event.name, (...args) => event.execute(...args));
-        } else {
-            client.on(event.name, (...args) => event.execute(...args));
-        }
-    }
+export default function handleEvents(client) {
+	for (const event of eventList) {
+		if (event.once) {
+			client.once(event.name, (...args) => event.execute(...args));
+			logger.info(`Registered event ${event.name} as once`);
+		}
+		else {
+			client.on(event.name, (...args) => event.execute(...args));
+			logger.info(`Registered event ${event.name}`);
+		}
+	}
 }
-
-module.exports = { handleEvents }
