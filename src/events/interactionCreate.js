@@ -1,16 +1,17 @@
-const { Events } = require('discord.js');
-const { logger } = require('../logging/logger');
+import { Events } from 'discord.js';
+import logger from '../logging/logger.js';
 
-module.exports = {
-    name: Events.InteractionCreate,
-    async execute(interaction) {
-        const command = interaction.client.commands.get(interaction.commandName);
+export const event = {
+	name: Events.InteractionCreate,
+	async execute(interaction) {
+		const command = interaction.client.commands.get(interaction.commandName);
 
-        try {
-            await command.execute(interaction);
-        } catch (error) {
-            console.error(error);
-            logger.error(error);
-        }
-    },
-}
+		try {
+			await command.execute(interaction);
+		}
+		catch (error) {
+			console.error(error);
+			logger.error(error);
+		}
+	},
+};
