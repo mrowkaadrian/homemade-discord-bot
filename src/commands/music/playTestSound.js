@@ -4,6 +4,7 @@ import { useMainPlayer, QueryType } from 'discord-player';
 import path from 'node:path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import myUwuifier from '../../util/uwuifier.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -14,8 +15,8 @@ export default {
 	async execute(interaction) {
 		const musicPlayer = useMainPlayer();
 		const channel = interaction.member.voice.channel;
-		if (!channel) return interaction.reply('You must be in a voice channel to use this command');
-		const soundPath = path.join(__dirname, '../../../sounds/test-sound.mp3');
+		if (!channel) return interaction.reply(myUwuifier.uwuifySentence('You must be in a voice channel to use this command'));
+		const soundPath = path.join(__dirname, '../../../sounds/test-song.mp3');
 
 		await interaction.deferReply();
 
@@ -27,7 +28,7 @@ export default {
 				},
 			});
 
-			await interaction.followUp('Playing test sound');
+			await interaction.followUp(myUwuifier.uwuifySentence('Playing test sound'));
 			logger.info('Executed play-test-sound command');
 		}
 		catch (error) {
