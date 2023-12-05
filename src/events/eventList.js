@@ -1,5 +1,5 @@
-import clientReady from './clientReady.js';
-import interactionCreate from './interactionCreate.js';
+import clientReady from './discord/clientReady.js';
+import interactionCreate from './discord/interactionCreate.js';
 
 export const eventList = [
 	clientReady,

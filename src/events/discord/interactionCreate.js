@@ -1,5 +1,5 @@
 import { Events } from 'discord.js';
-import logger from '../logging/logger.js';
+import logger from '../../logging/logger.js';
 
 export default {
 	name: Events.InteractionCreate,
