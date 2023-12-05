@@ -1,4 +1,5 @@
 import { createLogger, format, transports } from 'winston';
+import rootPath from 'app-root-path';
 
 const { combine, timestamp, printf } = format;
 
@@ -14,8 +15,8 @@ const logger = createLogger({
 	),
 	transports: [
 		new transports.Console(),
-		new transports.File({ filename: 'logs/combined.log' }),
-		new transports.File({ filename: 'logs/error.log', level: 'error' }),
+		new transports.File({ filename: `${rootPath}/logs/combined.log` }),
+		new transports.File({ filename: `${rootPath}logs/error.log`, level: 'error' }),
 	],
 });
 
