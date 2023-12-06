@@ -1,6 +1,6 @@
 import { useMainPlayer } from 'discord-player';
 import myUwuifier from '../../util/uwuifier.js';
-import { playerMenu } from '../../menus/musicPlayerMenu.js';
+import { playerMenu } from '../../interaction/menus/musicPlayerMenu.js';
 import logger from '../../logging/logger.js';
 
 export async function playMusic(interaction) {

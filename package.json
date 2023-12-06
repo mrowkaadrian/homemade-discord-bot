@@ -2,11 +2,11 @@
   "name": "discord-bot",
   "version": "1.0.0",
   "description": "",
-  "main": "bot.js",
+  "main": "src/run/bot.js",
   "type": "module",
   "scripts": {
-    "start": "node bot.js",
-    "deploy-commands": "node deploySlashCommands.js",
+    "start": "node src/run/bot.js",
+    "deploy-commands": "node src/run/deploySlashCommands.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

@@ -1,9 +1,9 @@
 import { Client, Collection, IntentsBitField } from 'discord.js';
-import { prepareMusicPlayer } from './src/util/prepareMusicPlayer.js';
+import { prepareMusicPlayer } from '../util/prepareMusicPlayer.js';
 import { config } from 'dotenv';
-import getCommands from './src/getCommands.js';
-import handleEvents from './src/handleEvents.js';
-import logger from './src/logging/logger.js';
+import getCommands from '../util/getCommands.js';
+import handleEvents from '../util/handleEvents.js';
+import logger from '../logging/logger.js';
 
 config();
 

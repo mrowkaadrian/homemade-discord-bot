@@ -1,6 +1,6 @@
 import { Events } from 'discord.js';
 import logger from '../../logging/logger.js';
-import { handleButtonClick } from '../../handleButtonClick.js';
+import { handleButtonClick } from '../../util/handleButtonClick.js';
 
 export default {
 	name: Events.InteractionCreate,

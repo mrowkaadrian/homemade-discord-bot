@@ -1,5 +1,5 @@
-import { commandList } from './commands/commandList.js';
-import logger from './logging/logger.js';
+import { commandList } from '../interaction/commands/commandList.js';
+import logger from '../logging/logger.js';
 
 export default function getCommands(client = undefined) {
 	const commandsJSON = [];

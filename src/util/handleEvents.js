@@ -1,5 +1,5 @@
-import { eventList } from './events/eventList.js';
-import logger from './logging/logger.js';
+import { eventList } from '../events/eventList.js';
+import logger from '../logging/logger.js';
 
 export default function handleEvents(client) {
 	for (const event of eventList) {

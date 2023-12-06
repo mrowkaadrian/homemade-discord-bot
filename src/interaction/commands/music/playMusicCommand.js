@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { playMusic } from '../../events/musicPlayer/playMusic.js';
+import { playMusic } from '../../../events/musicPlayer/playMusic.js';
 
 export default {
 	data: new SlashCommandBuilder()

@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
-import logger from '../../logging/logger.js';
-import myUwuifier from '../../util/uwuifier.js';
+import logger from '../../../logging/logger.js';
+import myUwuifier from '../../../util/uwuifier.js';
 
 export default {
 	data: new SlashCommandBuilder()
