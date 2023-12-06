@@ -1,7 +1,8 @@
-import { useMainPlayer } from 'discord-player';
+import { useMainPlayer, useQueue } from 'discord-player';
 import myUwuifier from '../../util/uwuifier.js';
 import { playerMenu } from '../../interaction/menus/musicPlayerMenu.js';
 import logger from '../../logging/logger.js';
+import { EmbedBuilder } from 'discord.js';
 
 export async function playMusic(interaction) {
 	const player = useMainPlayer();
@@ -24,8 +25,20 @@ export async function playMusic(interaction) {
 	try {
 		await player.play(channel, resource);
 
+		const resourceJSON = resource.toJSON();
+		const trackInfo = resourceJSON.tracks[0];
+
+		const nowPlayingEmbed = new EmbedBuilder()
+			.setTitle(myUwuifier.uwuifySentence('Now playing:'))
+			.setThumbnail(trackInfo.thumbnail)
+			.addFields(
+				{ name: 'Author', value: trackInfo.author, inline: true },
+				{ name: 'Title', value: trackInfo.title, inline: true },
+				{ name: 'Duration', value: trackInfo.duration, inline: true },
+			);
+
 		await interaction.followUp({
-			content: myUwuifier.uwuifySentence('Now playing: something, I don\'t know ://'),
+			embeds: [ nowPlayingEmbed ],
 			components: [ playerMenu ],
 		});
 		logger.info(`Executed play-music command with query: ${query}`);
