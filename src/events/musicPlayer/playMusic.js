@@ -5,9 +5,8 @@ import logger from '../../logging/logger.js';
 import { ActionRowBuilder, EmbedBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from 'discord.js';
 
 export async function playMusic(interaction) {
-	await interaction.deferReply();
-
 	const selection = await showTracksAndExpectSelection(interaction);
+
 	if (!selection) {
 		return interaction.editReply('You did not select a track in time.');
 	}
@@ -19,7 +18,7 @@ export async function playMusic(interaction) {
 	});
 
 	if (!channel) {
-		return interaction.editReply(myUwuifier.uwuifySentence('You must be in a voice channel to use this command'));
+		return interaction.editReply(myUwuifier.uwuifySentence('You must be in a voice channel to use this command.'));
 	}
 
 	if (!audioResource.hasTracks()) {
@@ -64,6 +63,7 @@ async function showTracksAndExpectSelection(interaction) {
 	const tracks = resourceJSON.tracks;
 
 	if (tracks.length === 1) {
+		await interaction.deferReply();
 		return tracks[0].url;
 	}
 
@@ -90,7 +90,7 @@ async function showTracksAndExpectSelection(interaction) {
 		});
 	}
 	catch (e) {
-		logger.warn('User did not select a track in time');
+		logger.warn('User did not select a track in time.');
 		return null;
 	}
 
