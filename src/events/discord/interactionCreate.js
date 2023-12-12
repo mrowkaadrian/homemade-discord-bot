@@ -9,11 +9,10 @@ export default {
 			const command = interaction.client.commands.get(interaction.commandName);
 
 			try {
+				logger.info(`Registered command: ${interaction.commandName}`);
 				await command.execute(interaction);
-				logger.info(`Registered command ${interaction.commandName}`);
 			}
 			catch (error) {
-				console.error(error);
 				logger.error(error);
 			}
 		}
@@ -21,11 +20,10 @@ export default {
 			const buttonId = interaction.customId;
 
 			try {
+				logger.info(`Registered button click: ${interaction.customId}`);
 				await handleButtonClick(buttonId, interaction);
-				logger.info(`Registered button ${interaction.customId}`);
 			}
 			catch (error) {
-				console.error(error);
 				logger.error(error);
 			}
 		}
