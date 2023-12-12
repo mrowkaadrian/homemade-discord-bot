@@ -2,16 +2,17 @@ import { useMainPlayer } from 'discord-player';
 import myUwuifier from '../../util/uwuifier.js';
 import { playerMenu } from '../../interaction/menus/musicPlayerMenu.js';
 import logger from '../../logging/logger.js';
-import { ActionRowBuilder, EmbedBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from 'discord.js';
+import { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from 'discord.js';
+import { nowPlayingEmbed } from '../../interaction/embeds/nowPlayingEmbed.js';
 
 export async function playMusic(interaction) {
-	const selection = await showTracksAndExpectSelection(interaction);
+	const player = useMainPlayer();
+	const selection = await showTracksAndExpectSelection(player, interaction);
 
 	if (!selection) {
 		return interaction.editReply('You did not select a track in time.');
 	}
 
-	const player = useMainPlayer();
 	const channel = interaction.member.voice.channel;
 	const audioResource = await player.search(selection, {
 		requestedBy: interaction.user,
@@ -26,25 +27,7 @@ export async function playMusic(interaction) {
 	}
 
 	try {
-		await player.play(channel, audioResource);
-
-		const resourceJSON = audioResource.toJSON();
-		const trackInfo = resourceJSON.tracks[0];
-
-		const nowPlayingEmbed = new EmbedBuilder()
-			.setTitle(myUwuifier.uwuifySentence('Now playing:'))
-			.setThumbnail(trackInfo.thumbnail)
-			.addFields(
-				{ name: 'Author', value: trackInfo.author, inline: true },
-				{ name: 'Title', value: trackInfo.title, inline: true },
-				{ name: 'Duration', value: trackInfo.duration, inline: true },
-			);
-
-		await interaction.editReply({
-			embeds: [ nowPlayingEmbed ],
-			components: [ playerMenu ],
-		});
-		logger.info(`Executed play-music command using resource: ${trackInfo.url}`);
+		await playSelectedTrack(player, channel, audioResource, interaction);
 	}
 	catch (error) {
 		await interaction.editReply('Something went wrong while playing the music. Check logs for more details.');
@@ -52,15 +35,10 @@ export async function playMusic(interaction) {
 	}
 }
 
-async function showTracksAndExpectSelection(interaction) {
-	const player = useMainPlayer();
+async function showTracksAndExpectSelection(player, interaction) {
 	const query = interaction.options.getString('query');
-	const resource = await player.search(query, {
-		requestedBy: interaction.user,
-	});
-
-	const resourceJSON = resource.toJSON();
-	const tracks = resourceJSON.tracks;
+	const resource = await player.search(query, { requestedBy: interaction.user });
+	const tracks = resource.toJSON().tracks;
 
 	if (tracks.length === 1) {
 		await interaction.deferReply();
@@ -81,19 +59,30 @@ async function showTracksAndExpectSelection(interaction) {
 		components: [ row ],
 	});
 
-	let response;
-
-	try {
-		response = await interaction.channel.awaitMessageComponent({
-			filter: i => i.customId === 'track-selection',
-			time: 60000,
+	await interaction.channel.awaitMessageComponent({
+		filter: i => i.customId === 'track-selection',
+		time: 30_000,
+	}).then(response => {
+		// Returns the URL of the selected track
+		return response.values[0];
+	}).catch(() => {
+		interaction.editReply({
+			content: 'You did not select a track in time.',
+			components: [],
 		});
-	}
-	catch (e) {
 		logger.warn('User did not select a track in time.');
 		return null;
-	}
+	});
+}
 
-	// Returns the URL of the selected track
-	return response.values[0];
+async function playSelectedTrack(player, channel, audioResource, interaction) {
+	await player.play(channel, audioResource);
+	const trackInfo = audioResource.toJSON().tracks[0];
+
+	await interaction.editReply({
+		embeds: [ nowPlayingEmbed(trackInfo) ],
+		components: [ playerMenu ],
+	});
+
+	logger.info(`Executed play-music command using resource: ${trackInfo.url}`);
 }
