@@ -39,6 +39,7 @@ async function showTracksAndExpectSelection(player, interaction) {
 	const query = interaction.options.getString('query');
 	const resource = await player.search(query, { requestedBy: interaction.user });
 	const tracks = resource.toJSON().tracks;
+	let selectedTrack = null;
 
 	if (tracks.length === 1) {
 		await interaction.deferReply();
@@ -64,15 +65,17 @@ async function showTracksAndExpectSelection(player, interaction) {
 		time: 30_000,
 	}).then(response => {
 		// Returns the URL of the selected track
-		return response.values[0];
-	}).catch(() => {
+		logger.info(`User trying to play music from: ${response.values[0]}`);
+		selectedTrack = response.values[0];
+	}).catch((e) => {
 		interaction.editReply({
 			content: 'You did not select a track in time.',
 			components: [],
 		});
-		logger.warn('User did not select a track in time.');
-		return null;
+		logger.warn(e);
 	});
+
+	return selectedTrack;
 }
 
 async function playSelectedTrack(player, channel, audioResource, interaction) {
