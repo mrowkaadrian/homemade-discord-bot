@@ -2,12 +2,12 @@ import Uwuifier from 'uwuifier';
 
 const myUwuifier = new Uwuifier({
 	spaces: {
-		faces: 0.5,
-		actions: 0.075,
-		stutters: 0.1,
+		faces: 0,
+		actions: 0,
+		stutters: 0,
 	},
-	words: 1,
-	exclamations: 1,
+	words: 0,
+	exclamations: 0,
 });
 
 export default myUwuifier;
