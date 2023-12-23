@@ -60,6 +60,7 @@ async function showTracksAndExpectSelection(player, interaction) {
 	const row = new ActionRowBuilder().addComponents(select);
 
 	await interaction.reply({
+		content: 'Select your track:',
 		components: [ row ],
 	});
 
