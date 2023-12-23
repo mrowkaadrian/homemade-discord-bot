@@ -7,6 +7,11 @@ import logger from '../logging/logger.js';
 
 config();
 
+// Additional logging in case unexpected errors.
+process.on('unhandledRejection', error => {
+	logger.error('Unhandled promise rejection:', error);
+});
+
 const client = new Client({
 	intents: [
 		IntentsBitField.Flags.Guilds,
