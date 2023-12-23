@@ -6,11 +6,12 @@ import { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilde
 import { nowPlayingEmbed } from '../../interaction/embeds/nowPlayingEmbed.js';
 
 export async function playMusic(interaction) {
+	// TODO: Sometimes user gets an error "This interaction failed" in the chat, but it works properly anyway.
 	const player = useMainPlayer();
 	const selection = await showTracksAndExpectSelection(player, interaction);
 
 	if (!selection) {
-		return interaction.editReply('You did not select a track in time.');
+		return;
 	}
 
 	const channel = interaction.member.voice.channel;
@@ -19,18 +20,20 @@ export async function playMusic(interaction) {
 	});
 
 	if (!channel) {
-		return interaction.editReply(myUwuifier.uwuifySentence('You must be in a voice channel to use this command.'));
-	}
-
-	if (!audioResource.hasTracks()) {
-		return interaction.editReply('Something went wrong while searching for the track. Check logs for more details.');
+		return interaction.editReply({
+			content: myUwuifier.uwuifySentence('You must be in a voice channel to use this command.'),
+			components: [],
+		});
 	}
 
 	try {
 		await playSelectedTrack(player, channel, audioResource, interaction);
 	}
 	catch (error) {
-		await interaction.editReply('Something went wrong while playing the music. Check logs for more details.');
+		await interaction.editReply({
+			content: 'Something went wrong while searching for the track. Check logs for more details.',
+			components: [],
+		});
 		logger.error(`Error executing play-music command using resource: ${audioResource.toJSON().tracks[0].url}` + error);
 	}
 }
@@ -73,12 +76,17 @@ async function showTracksAndExpectSelection(player, interaction) {
 			components: [],
 		});
 		logger.warn(e);
+		logger.warn('User did not select a track in time.');
 	});
 
 	return selectedTrack;
 }
 
 async function playSelectedTrack(player, channel, audioResource, interaction) {
+	if (!audioResource.hasTracks()) {
+		throw new Error('Audio resource has no tracks.');
+	}
+
 	await player.play(channel, audioResource);
 	const trackInfo = audioResource.toJSON().tracks[0];
 
